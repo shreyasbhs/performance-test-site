@@ -6,7 +6,7 @@ const https = require('https');
 const path = require('path');
 
 const app = express();
-const PORT = 8091;
+const PORT = 80;
 const SSL_PORT = 443;
 
 //Change the default views directory
