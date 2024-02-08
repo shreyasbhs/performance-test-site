@@ -36,7 +36,7 @@ app.set('view engine', 'nunjucks');
 // app.use(express.static(__dirname, { dotfiles: 'allow' }));
 
 app.get('/', (req, res) => { 
-    const allowedDomains = "*.cloudfront.net assets-global.website-files.com cdnjs.cloudflare.com cdnjs.cloudflare.com *.webformscr.com amosk.com.ua"
+    const allowedDomains = "*.cloudfront.net assets-global.website-files.com cdnjs.cloudflare.com cdnjs.cloudflare.com *.webformscr.com amosk.com.ua rum-dev-dct-collector.soasta.com"
     const nonce = crypto.randomBytes(16).toString('base64');
     res.set(`Content-Security-Policy`, `script-src ${allowedDomains} 'nonce-${nonce}'`)
     data = {
