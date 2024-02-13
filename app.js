@@ -54,10 +54,15 @@ app.get('/', (req, res) => {
         res.render('index', data)
     }
     else { 
-        
-        var cspHeader = fs.readFileSync(path.join(__dirname, 'headers_metadata/csp.txt'));
-        res.set('Content-Security-Policy', cspHeader);
-         data = {
+        try {
+            var cspHeader = fs.readFileSync(path.join(__dirname, 'headers_metadata/csp.txt'));
+            res.set('Content-Security-Policy', cspHeader);
+          
+        }
+        catch (error) { 
+            consol.error(error);
+        }
+        data = {
             "nonce": nonce
         }
         res.render('index', data)
@@ -75,6 +80,7 @@ app.post('/set-csp', (req, res) => {
     catch (error) { 
         console.error(error)
     }
+    return res.status(202);
      
 })
 
