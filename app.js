@@ -75,7 +75,7 @@ app.get('/', (req, res) => {
 app.post('/set-csp', (req, res) => { 
     var cspHeaderData;
     try {
-        const cspHeaderData = req.body;
+        cspHeaderData = req.body;
     
         fs.writeFileSync('headers_metadata/csp.txt', cspHeaderData["content"]);
     }
