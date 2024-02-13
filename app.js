@@ -73,7 +73,7 @@ app.get('/', (req, res) => {
 })
 
 app.post('/set-csp', (req, res) => { 
-    var cspHeaderData = None;
+    var cspHeaderData;
     try {
         const cspHeaderData = req.body;
     
