@@ -81,7 +81,8 @@ app.post('/set-csp', (req, res) => {
     catch (error) { 
         console.error(error)
     }
-    return res.status(202);
+    return res.status(202).json({ "message": `Set the CSP header to ${cspHeaderData}` });
+    
      
 })
 
