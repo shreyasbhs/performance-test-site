@@ -73,6 +73,7 @@ app.get('/', (req, res) => {
 })
 
 app.post('/set-csp', (req, res) => { 
+    var cspHeaderData = None;
     try {
         const cspHeaderData = req.body;
     
@@ -81,7 +82,7 @@ app.post('/set-csp', (req, res) => {
     catch (error) { 
         console.error(error)
     }
-    return res.status(202).json({ "message": `Set the CSP header to ${cspHeaderData}` });
+    return res.status(202).json({ "message": `Set the CSP headers to ${cspHeaderData}` });
     
      
 })
