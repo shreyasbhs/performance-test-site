@@ -4,6 +4,7 @@ const nunjucks = require('nunjucks');
 const fs = require('fs');
 const https = require('https');
 const path = require('path');
+const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = 80;
@@ -34,17 +35,48 @@ nunjucks.configure('public/templates', {
 app.set('view engine', 'nunjucks');
 
 // app.use(express.static(__dirname, { dotfiles: 'allow' }));
+app.use(express.json()); 
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => { 
-    const allowedDomains = "*.cloudfront.net assets-global.website-files.com cdnjs.cloudflare.com cdnjs.cloudflare.com *.webformscr.com amosk.com.ua rum-dev-dct-collector.soasta.com"
-    const nonce = crypto.randomBytes(16).toString('base64');
-    res.set(`Content-Security-Policy`, `script-src ${allowedDomains} 'nonce-${nonce}'`)
-    data = {
-        "nonce": nonce
+    var experimental = false;
+    if (req.query.experimental) { 
+        experimental = req.query.experimental == 'on' ? true : false;
     }
-    res.render('index',data)
+    const nonce = crypto.randomBytes(16).toString('base64');
+    if (!experimental) {
+        const allowedDomains = "*.cloudfront.net assets-global.website-files.com cdnjs.cloudflare.com cdnjs.cloudflare.com *.webformscr.com amosk.com.ua rum-dev-dct-collector.soasta.com"
+        
+        res.set(`Content-Security-Policy`, `script-src ${allowedDomains} 'nonce-${nonce}'`);
+        data = {
+            "nonce": nonce
+        }
+        res.render('index', data)
+    }
+    else { 
+        
+        var cspHeader = fs.readFileSync(path.join(__dirname, 'headers_metadata/csp.txt'));
+        res.set('Content-Security-Policy', cspHeader);
+         data = {
+            "nonce": nonce
+        }
+        res.render('index', data)
+        
+    }
+    
+   
 })
 
+app.post('/set-csp', (req, res) => { 
+    try {
+        const cspHeaderData = res.body;
+        fs.writeFileSync('header_metadata/csp.txt', cspHeaderData["content"]);
+    }
+    catch (error) { 
+        console.error(error)
+    }
+     
+})
 
 
 app.listen(PORT, () => {
