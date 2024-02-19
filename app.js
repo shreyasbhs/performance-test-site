@@ -56,8 +56,9 @@ app.get('/', (req, res) => {
     else { 
         try {
             var cspHeader = fs.readFileSync(path.join(__dirname, 'headers_metadata/csp.txt'));
-            res.set('Content-Security-Policy', cspHeader);
-          
+            if (cspHeader && cspHeader.length > 0) {
+                res.set('Content-Security-Policy', cspHeader);
+            }
         }
         catch (error) { 
             consol.error(error);
@@ -71,7 +72,18 @@ app.get('/', (req, res) => {
     
    
 })
+app.get('/pearl-reflector', (req, res) => { 
+    for (var header in req.query) { 
+        if (header.indexOf('he') != -1) { 
+            let nameParts = headerName.split("-");
+            let trimPart = nameParts[0] + "-" + nameParts[1] + "-";
 
+            let realHeaderName = headerName.replace(trimPart, "");
+            res.setHeader(realHeaderName, req.query[header])
+        }
+    }
+    res.render('pearl-reflector');
+})
 app.post('/set-csp', (req, res) => { 
     var cspHeaderData;
     try {
