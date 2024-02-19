@@ -74,11 +74,11 @@ app.get('/', (req, res) => {
 })
 app.get('/pearl-reflector', (req, res) => { 
     for (var header in req.query) { 
-        if (header.indexOf('he') != -1) { 
-            let nameParts = headerName.split("-");
+        if (header.indexOf('he-') != -1) { 
+            let nameParts = header.split("-");
             let trimPart = nameParts[0] + "-" + nameParts[1] + "-";
 
-            let realHeaderName = headerName.replace(trimPart, "");
+            let realHeaderName = header.replace(trimPart, "");
             res.setHeader(realHeaderName, req.query[header])
         }
     }
